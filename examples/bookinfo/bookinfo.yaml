@@ -1,0 +1,161 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+metadata:
+
+  template_name: Bookinfo Application
+  template_author: Puccini
+
+imports:
+
+- namespace_prefix: k8s
+  file: https://raw.githubusercontent.com/tliron/turandot/main/assets/tosca/profiles/kubernetes/1.0/profile.yaml
+- file: ../../types/relationships.yaml
+
+topology_template:
+
+  node_templates:
+
+    productpage:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties:
+            namespace: default
+            labels:
+              app: productpage
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: productpage
+                    image: docker.io/istio/examples-bookinfo-productpage-v1:1.16.2
+                    imagePullPolicy: Always
+                    securityContext:
+                      runAsUser: 1000
+        service:
+          properties:
+            spec:
+              type: NodePort
+              ports:
+              - { name: http, protocol: TCP, port: 9080, targetPort: { port: 9080 }, nodePort: 30000 }
+      requirements:
+      - route: 
+          node: reviews
+          relationship: HttpRoute
+      - route:
+          node: details
+          relationship: HttpRoute
+
+    reviews:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: reviews
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: reviews
+                    image: docker.io/istio/examples-bookinfo-reviews-v2:1.16.2
+                    imagePullPolicy: Always
+                    securityContext:
+                      runAsUser: 1000
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: http, protocol: TCP, port: 9080, targetPort: { port: 9080 } }
+      requirements:
+      - route: 
+          node: ratings
+          relationship: HttpRoute
+
+    details:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: details
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: details
+                    image: docker.io/istio/examples-bookinfo-details-v1:1.16.2
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: http, protocol: TCP, port: 9080, targetPort: { port: 9080 } }
+
+    mongodb:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: mongodb
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: mongodb
+                    image: docker.io/istio/examples-bookinfo-mongodb:1.16.2
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: db, protocol: TCP, port: 27017, targetPort: { port: 27017 } }
+
+    ratings:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: ratings
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: ratings
+                    image: docker.io/istio/examples-bookinfo-ratings-v2:1.16.2
+                    imagePullPolicy: Always
+                    env:
+                      - name: MONGO_DB_URL
+                        value: mongodb://mongodb:27017/test
+                    securityContext:
+                      runAsUser: 1000
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: http, protocol: TCP, port: 9080, targetPort: { port: 9080 } }
+      requirements:
+      - route: 
+          node: mongodb
+          relationship: SynchronousRoute

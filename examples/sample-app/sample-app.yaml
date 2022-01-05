@@ -1,0 +1,194 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+metadata:
+
+  template_name: Sample Application
+  template_author: Puccini
+
+imports:
+
+- namespace_prefix: k8s
+  file: https://raw.githubusercontent.com/tliron/turandot/main/assets/tosca/profiles/kubernetes/1.0/profile.yaml
+- file: ../../types/relationships.yaml
+
+topology_template:
+
+  node_templates:
+
+    rabbitmq:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties:
+            namespace: default
+            labels:
+              app: rabbitmq
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: rabbitmq
+                    image: rabbitmq:management
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: tcp, protocol: TCP, port: 5672, targetPort: { port: 5672 } }
+              - { name: management, protocol: TCP, port: 15672, targetPort: { port: 15672 } }
+
+    mongodb:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: mongodb
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: mongodb
+                    image: mongo
+                    env:
+                      - name: MONGO_INITDB_ROOT_USERNAME
+                        value: root
+                      - name: MONGO_INITDB_ROOT_PASSWORD
+                        value: toor
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: db, protocol: TCP, port: 27017, targetPort: { port: 27017 } }
+
+    message-reader:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: message-reader
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: message-reader
+                    image: angelo1996/message-reader:latest
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: http, protocol: TCP, port: 8080, targetPort: { port: 8080 } }
+      requirements:
+      - route: 
+          node: mongodb
+          relationship: SynchronousRoute
+      - route: 
+          node: rabbitmq
+          relationship: AMQPRoute
+      
+    message-publisher:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: message-publisher
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: message-publisher
+                    image: angelo1996/message-publisher:latest
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: http, protocol: TCP, port: 8080, targetPort: { port: 8080 } }
+      requirements:
+      - route: 
+          node: rabbitmq
+          relationship: AMQPRoute
+
+    message-notifier:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: message-notifier
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: message-notifier
+                    image: angelo1996/message-notifier:latest
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              ports:
+              - { name: http, protocol: TCP, port: 8080, targetPort: { port: 8080 } }
+      requirements:
+      - route: 
+          node: rabbitmq
+          relationship: AMQPRoute
+
+    api-gateway:
+      type: k8s:Service
+      capabilities:
+        metadata:
+          properties: 
+            namespace: default
+            labels:
+              app: api-gateway
+        deployment:
+          properties:
+            spec:
+              template:
+                spec:
+                  schedulerName: scheduler-plugins-scheduler
+                  containers:
+                  - name: api-gateway
+                    image: angelo1996/api-gateway:latest
+                    imagePullPolicy: Always
+        service:
+          properties:
+            spec:
+              type: NodePort
+              ports:
+              - { name: http, protocol: TCP, port: 8080, targetPort: { port: 8080 }, nodePort: 30000 }
+      requirements:
+      - route: 
+          node: message-publisher
+          relationship: HttpRoute
+      - route: 
+          node: message-notifier
+          relationship: HttpServerPushRoute
+      - route: 
+          node: message-reader
+          relationship: HttpRoute
+
+    

@@ -1,0 +1,310 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _21MnazmCDF6frxOzt4cENfZdyMs
+  labels:
+    app: rabbitmq
+  name: rabbitmq-service
+  namespace: default
+spec:
+  ports:
+    - name: tcp
+      port: 5672
+      protocol: TCP
+      targetPort: 5672
+    - name: management
+      port: 15672
+      protocol: TCP
+      targetPort: 15672
+  selector:
+    app: rabbitmq
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _21MnazmCDF6frxOzt4cENfZdyMs
+  labels:
+    app: rabbitmq
+  name: rabbitmq-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _21MnazmCDF6frxOzt4cENfZdyMs
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - image: rabbitmq:management
+          imagePullPolicy: Always
+          name: rabbitmq
+          resources:
+            requests:
+              memory: "2Gi"
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _21Mnb2x77xj7hoRYOlUdqjdbXPL
+  labels:
+    app: message-reader
+  name: message-reader-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: message-reader
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _21Mnb2x77xj7hoRYOlUdqjdbXPL
+      labels:
+        app: message-reader
+    spec:
+      containers:
+        - image: angelo1996/message-reader:latest
+          imagePullPolicy: Always
+          name: message-reader
+          resources:
+            requests:
+              memory: "1Gi"
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _21Mnb2x77xj7hoRYOlUdqjdbXPL
+  labels:
+    app: message-reader
+  name: message-reader-service
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: message-reader
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _21Mnb3dRfV01VSMO50pCeRQWdm9
+  labels:
+    app: message-notifier
+  name: message-notifier-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: message-notifier
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _21Mnb3dRfV01VSMO50pCeRQWdm9
+      labels:
+        app: message-notifier
+    spec:
+      containers:
+        - image: angelo1996/message-notifier:latest
+          imagePullPolicy: Always
+          name: message-notifier
+          resources:
+            requests:
+              memory: "1Gi"
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _21Mnb3dRfV01VSMO50pCeRQWdm9
+  labels:
+    app: message-notifier
+  name: message-notifier-service
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: message-notifier
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _21Mnb4zg9CRVjxKXA37akNQBoNV
+  labels:
+    app: mongodb
+  name: mongodb-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _21Mnb4zg9CRVjxKXA37akNQBoNV
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: toor
+          image: mongo
+          imagePullPolicy: Always
+          name: mongodb
+          resources:
+            requests:
+              memory: "1Gi"
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _21Mnb4zg9CRVjxKXA37akNQBoNV
+  labels:
+    app: mongodb
+  name: mongodb-service
+  namespace: default
+spec:
+  ports:
+    - name: db
+      port: 27017
+      protocol: TCP
+      targetPort: 27017
+  selector:
+    app: mongodb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _21Mnb5Mb0sth0TNJRqq19XjsmrJ
+  labels:
+    app: api-gateway
+  name: api-gateway-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _21Mnb5Mb0sth0TNJRqq19XjsmrJ
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - image: angelo1996/api-gateway:latest
+          imagePullPolicy: Always
+          name: api-gateway
+          resources:
+            requests:
+              memory: "0.5Gi"
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _21Mnb5Mb0sth0TNJRqq19XjsmrJ
+  labels:
+    app: api-gateway
+  name: api-gateway-service
+  namespace: default
+spec:
+  ports:
+    - name: http
+      nodePort: 30000
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: api-gateway
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _21MnazV4hK5APhjZNdNNB3mx9XM
+  labels:
+    app: message-publisher
+  name: message-publisher-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: message-publisher
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _21MnazV4hK5APhjZNdNNB3mx9XM
+      labels:
+        app: message-publisher
+    spec:
+      containers:
+        - image: angelo1996/message-publisher:latest
+          imagePullPolicy: Always
+          name: message-publisher
+          resources:
+            requests:
+              memory: "1Gi"
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _21MnazV4hK5APhjZNdNNB3mx9XM
+  labels:
+    app: message-publisher
+  name: message-publisher-service
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: message-publisher

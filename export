@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+
+HERE=$(dirname "$(readlink -f "$0")")
+
+DGRAPH_IP=$1
+DGRAPH_PORT=$2
+SERVICE_TEMPLATE_PATH=$3
+OUTPUT_JSON_PATH=$4
+
+function c () {
+	curl "http://$1:$2/$3?commitNow=true" \
+		--header "Content-Type: application/$4" \
+		--request POST \
+		--data-binary "$5" \
+		--silent | python3 -m json.tool
+}
+
+puccini-tosca compile $SERVICE_TEMPLATE_PATH --exec=./dgraph.js --output=$OUTPUT_JSON_PATH
+
+c $DGRAPH_IP $DGRAPH_PORT alter json '{"drop_all": true}'
+c $DGRAPH_IP $DGRAPH_PORT alter json 'tosca.name: string @index(exact) .'
+#c alter json 'clout.edge: uid @count @reverse .'
+c $DGRAPH_IP $DGRAPH_PORT mutate json @"$OUTPUT_JSON_PATH"
+
+#c query dql '{
+# nodeTemplates(func: eq(tosca.name, "reviews")){
+#   tosca.name
+#   clout.edge @facets(tosca.types) {
+#    tosca.name
+#  }
+#   ~clout.edge @facets(tosca.types) {
+#    tosca.name
+#  }
+#  
+# }
+#}'

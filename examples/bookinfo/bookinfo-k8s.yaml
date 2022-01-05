@@ -1,0 +1,245 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _23IW0QNqLEz96e2VBXP94NUYDzP
+  labels:
+    app: reviews
+  name: reviews-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: reviews
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _23IW0QNqLEz96e2VBXP94NUYDzP
+      labels:
+        app: reviews
+    spec:
+      containers:
+        - image: docker.io/istio/examples-bookinfo-reviews-v2:1.16.2
+          imagePullPolicy: Always
+          name: reviews
+          securityContext:
+            runAsUser: 1000
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _23IW0QNqLEz96e2VBXP94NUYDzP
+  labels:
+    app: reviews
+  name: reviews
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 9080
+      protocol: TCP
+      targetPort: 9080
+  selector:
+    app: reviews
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _23IW0QcV0cG8d8Qb9KKipsj05YF
+  labels:
+    app: details
+  name: details
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 9080
+      protocol: TCP
+      targetPort: 9080
+  selector:
+    app: details
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _23IW0QcV0cG8d8Qb9KKipsj05YF
+  labels:
+    app: details
+  name: details-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: details
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _23IW0QcV0cG8d8Qb9KKipsj05YF
+      labels:
+        app: details
+    spec:
+      containers:
+        - image: docker.io/istio/examples-bookinfo-details-v1:1.16.2
+          imagePullPolicy: Always
+          name: details
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _23IW0QdiS92OqiYm3MgSO5USSse
+  labels:
+    app: productpage
+  name: productpage-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: productpage
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _23IW0QdiS92OqiYm3MgSO5USSse
+      labels:
+        app: productpage
+    spec:
+      containers:
+        - image: docker.io/istio/examples-bookinfo-productpage-v1:1.16.2
+          imagePullPolicy: Always
+          name: productpage
+          securityContext:
+            runAsUser: 1000
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _23IW0QdiS92OqiYm3MgSO5USSse
+  labels:
+    app: productpage
+  name: productpage
+  namespace: default
+spec:
+  ports:
+    - name: http
+      nodePort: 30000
+      port: 9080
+      protocol: TCP
+      targetPort: 9080
+  selector:
+    app: productpage
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _23IW0Sd9S0tQzfOOsOVJVGiIFHg
+  labels:
+    app: mongodb
+  name: mongodb-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _23IW0Sd9S0tQzfOOsOVJVGiIFHg
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - image: docker.io/istio/examples-bookinfo-mongodb:1.16.2
+          imagePullPolicy: Always
+          name: mongodb
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _23IW0Sd9S0tQzfOOsOVJVGiIFHg
+  labels:
+    app: mongodb
+  name: mongodb
+  namespace: default
+spec:
+  ports:
+    - name: db
+      port: 27017
+      protocol: TCP
+      targetPort: 27017
+  selector:
+    app: mongodb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: deployment
+    clout.puccini.cloud/vertex: _23IW0Ngs3nTs7dGOuyGZsdVyPiO
+  labels:
+    app: ratings
+  name: ratings-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: ratings
+  template:
+    metadata:
+      annotations:
+        clout.puccini.cloud/capability: deployment
+        clout.puccini.cloud/vertex: _23IW0Ngs3nTs7dGOuyGZsdVyPiO
+      labels:
+        app: ratings
+    spec:
+      containers:
+        - env:
+            - name: MONGO_DB_URL
+              value: mongodb://mongodb:27017/test
+          image: docker.io/istio/examples-bookinfo-ratings-v2:1.16.2
+          imagePullPolicy: Always
+          name: ratings
+          securityContext:
+            runAsUser: 1000
+      schedulerName: scheduler-plugins-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    clout.puccini.cloud/capability: service
+    clout.puccini.cloud/vertex: _23IW0Ngs3nTs7dGOuyGZsdVyPiO
+  labels:
+    app: ratings
+  name: ratings
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 9080
+      protocol: TCP
+      targetPort: 9080
+  selector:
+    app: ratings

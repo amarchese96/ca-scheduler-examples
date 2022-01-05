@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: message-publisher
+          uri: http://message-publisher-service:8080
+          predicates:
+            - Path=/publish/**
+          filters:
+            - RewritePath=/publish/(?<path>.*), /$\{path}
+        - id: message-notifier
+          uri: http://message-notifier-service:8080
+          predicates:
+            - Path=/subscribe/**
+          filters:
+            - RewritePath=/subscribe/(?<path>.*), /$\{path}
+        - id: message-reader
+          uri: http://message-reader-service:8080
+          predicates:
+            - Path=/read/**
+          filters:
+            - RewritePath=/read/(?<path>.*), /$\{path}

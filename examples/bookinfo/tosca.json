@@ -1,0 +1,227 @@
+{
+  "set": [
+    {
+      "clout.vertex": [
+        {
+          "capabilities": [
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"template\":{\"spec\":{\"schedulerName\":\"scheduler-plugins-scheduler\",\"containers\":[{\"name\":\"ratings\",\"image\":\"docker.io/istio/examples-bookinfo-ratings-v2:1.16.2\",\"imagePullPolicy\":\"Always\",\"env\":[{\"name\":\"MONGO_DB_URL\",\"value\":\"mongodb://mongodb:27017/test\"}],\"securityContext\":{\"runAsUser\":1000}}]}}}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Deployment\":{\"metadata\":{\"turandot.apiVersion\":\"apps/v1\",\"turandot.copy.1\":\"metadata.labels-\u003espec.selector.matchLabels\",\"turandot.copy.2\":\"metadata.labels-\u003espec.template.metadata.labels\",\"turandot.copy.3\":\"metadata.annotations-\u003espec.template.metadata.annotations\",\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\"},\"description\":\"Deployment enables declarative updates for Pods and ReplicaSets.\"}}"
+            },
+            {
+              "tosca.attributes": "{}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"labels\":{\"app\":\"ratings\"},\"namespace\":\"default\"}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Metadata\":{\"description\":\"ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.\",\"metadata\":{\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\"}}}"
+            },
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"ports\":[{\"protocol\":\"TCP\",\"port\":9080,\"targetPort\":9080,\"name\":\"http\"}]}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"metadata\":{\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"v1\",\"turandot.copy\":\"metadata.labels-\u003espec.selector\"},\"description\":\"Service is a named abstraction of software service (for example, mysql) consisting of local port (for example 3306) that the proxy listens on, and the selector that determines which pods will answer requests sent through the proxy.\"}}"
+            }
+          ],
+          "clout.edge": [
+            {
+              "clout.edge|tosca.attributes": "{}",
+              "clout.edge|tosca.description": "",
+              "clout.edge|tosca.entity": "relationship",
+              "clout.edge|tosca.name": "route",
+              "clout.edge|tosca.properties": "{\"priority\":25}",
+              "clout.edge|tosca.types": "{\"PriorityRoute\":{\"parent\":\"cloud.puccini.kubernetes::Route\"},\"SynchronousRoute\":{\"parent\":\"PriorityRoute\"},\"cloud.puccini.kubernetes::Route\":{}}",
+              "uid": "_:clout.vertex._23IVk4zRBTSSbxqcae7KIptQiNn"
+            }
+          ],
+          "tosca.attributes": "{}",
+          "tosca.description": "",
+          "tosca.entity": "nodeTemplate",
+          "tosca.name": "ratings",
+          "tosca.properties": "{}",
+          "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Represents a microservice: a controlled pod (Deployment) plus a controlled endpoint (Service).\"}}",
+          "uid": "_:clout.vertex._23IVk64vtIILAmtmxEFk8wFqQvL"
+        },
+        {
+          "capabilities": [
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"template\":{\"spec\":{\"schedulerName\":\"scheduler-plugins-scheduler\",\"containers\":[{\"name\":\"reviews\",\"image\":\"docker.io/istio/examples-bookinfo-reviews-v2:1.16.2\",\"imagePullPolicy\":\"Always\",\"securityContext\":{\"runAsUser\":1000}}]}}}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Deployment\":{\"description\":\"Deployment enables declarative updates for Pods and ReplicaSets.\",\"metadata\":{\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"apps/v1\",\"turandot.copy.1\":\"metadata.labels-\u003espec.selector.matchLabels\",\"turandot.copy.2\":\"metadata.labels-\u003espec.template.metadata.labels\",\"turandot.copy.3\":\"metadata.annotations-\u003espec.template.metadata.annotations\",\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\"}}}"
+            },
+            {
+              "tosca.attributes": "{}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"labels\":{\"app\":\"reviews\"},\"namespace\":\"default\"}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Metadata\":{\"metadata\":{\"specification.version\":\"1.22.1\",\"specification.name\":\"Kubernetes\"},\"description\":\"ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.\"}}"
+            },
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"ports\":[{\"protocol\":\"TCP\",\"port\":9080,\"targetPort\":9080,\"name\":\"http\"}]}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Service is a named abstraction of software service (for example, mysql) consisting of local port (for example 3306) that the proxy listens on, and the selector that determines which pods will answer requests sent through the proxy.\",\"metadata\":{\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"v1\",\"turandot.copy\":\"metadata.labels-\u003espec.selector\",\"turandot.metadata\":\"true\"}}}"
+            }
+          ],
+          "clout.edge": [
+            {
+              "clout.edge|tosca.attributes": "{}",
+              "clout.edge|tosca.description": "",
+              "clout.edge|tosca.entity": "relationship",
+              "clout.edge|tosca.name": "route",
+              "clout.edge|tosca.properties": "{\"priority\":100}",
+              "clout.edge|tosca.types": "{\"HttpRoute\":{\"parent\":\"SynchronousRoute\"},\"PriorityRoute\":{\"parent\":\"cloud.puccini.kubernetes::Route\"},\"SynchronousRoute\":{\"parent\":\"PriorityRoute\"},\"cloud.puccini.kubernetes::Route\":{}}",
+              "uid": "_:clout.vertex._23IVk64vtIILAmtmxEFk8wFqQvL"
+            }
+          ],
+          "tosca.attributes": "{}",
+          "tosca.description": "",
+          "tosca.entity": "nodeTemplate",
+          "tosca.name": "reviews",
+          "tosca.properties": "{}",
+          "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Represents a microservice: a controlled pod (Deployment) plus a controlled endpoint (Service).\"}}",
+          "uid": "_:clout.vertex._23IVk71YdB3NKQlVDCRhtvbwiqX"
+        },
+        {
+          "capabilities": [
+            {
+              "tosca.attributes": "{}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"labels\":{\"app\":\"productpage\"},\"namespace\":\"default\"}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Metadata\":{\"description\":\"ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.\",\"metadata\":{\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\"}}}"
+            },
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"type\":\"NodePort\",\"ports\":[{\"name\":\"http\",\"protocol\":\"TCP\",\"port\":9080,\"targetPort\":9080,\"nodePort\":30000}]}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Service is a named abstraction of software service (for example, mysql) consisting of local port (for example 3306) that the proxy listens on, and the selector that determines which pods will answer requests sent through the proxy.\",\"metadata\":{\"turandot.copy\":\"metadata.labels-\u003espec.selector\",\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"v1\"}}}"
+            },
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"productpage\",\"image\":\"docker.io/istio/examples-bookinfo-productpage-v1:1.16.2\",\"imagePullPolicy\":\"Always\",\"securityContext\":{\"runAsUser\":1000}}],\"schedulerName\":\"scheduler-plugins-scheduler\"}}}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Deployment\":{\"description\":\"Deployment enables declarative updates for Pods and ReplicaSets.\",\"metadata\":{\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"apps/v1\",\"turandot.copy.1\":\"metadata.labels-\u003espec.selector.matchLabels\",\"turandot.copy.2\":\"metadata.labels-\u003espec.template.metadata.labels\",\"turandot.copy.3\":\"metadata.annotations-\u003espec.template.metadata.annotations\"}}}"
+            }
+          ],
+          "clout.edge": [
+            {
+              "clout.edge|tosca.attributes": "{}",
+              "clout.edge|tosca.description": "",
+              "clout.edge|tosca.entity": "relationship",
+              "clout.edge|tosca.name": "route",
+              "clout.edge|tosca.properties": "{\"priority\":100}",
+              "clout.edge|tosca.types": "{\"HttpRoute\":{\"parent\":\"SynchronousRoute\"},\"PriorityRoute\":{\"parent\":\"cloud.puccini.kubernetes::Route\"},\"SynchronousRoute\":{\"parent\":\"PriorityRoute\"},\"cloud.puccini.kubernetes::Route\":{}}",
+              "uid": "_:clout.vertex._23IVk71YdB3NKQlVDCRhtvbwiqX"
+            },
+            {
+              "clout.edge|tosca.attributes": "{}",
+              "clout.edge|tosca.description": "",
+              "clout.edge|tosca.entity": "relationship",
+              "clout.edge|tosca.name": "route",
+              "clout.edge|tosca.properties": "{\"priority\":100}",
+              "clout.edge|tosca.types": "{\"SynchronousRoute\":{\"parent\":\"PriorityRoute\"},\"cloud.puccini.kubernetes::Route\":{},\"HttpRoute\":{\"parent\":\"SynchronousRoute\"},\"PriorityRoute\":{\"parent\":\"cloud.puccini.kubernetes::Route\"}}",
+              "uid": "_:clout.vertex._23IVk7fCslw3C8mDrKubFkFvtgI"
+            }
+          ],
+          "tosca.attributes": "{}",
+          "tosca.description": "",
+          "tosca.entity": "nodeTemplate",
+          "tosca.name": "productpage",
+          "tosca.properties": "{}",
+          "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Represents a microservice: a controlled pod (Deployment) plus a controlled endpoint (Service).\"}}",
+          "uid": "_:clout.vertex._23IVk2zEVS46LI1K5HFXKD2baCK"
+        },
+        {
+          "capabilities": [
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"template\":{\"spec\":{\"schedulerName\":\"scheduler-plugins-scheduler\",\"containers\":[{\"name\":\"mongodb\",\"image\":\"docker.io/istio/examples-bookinfo-mongodb:1.16.2\",\"imagePullPolicy\":\"Always\"}]}}}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Deployment\":{\"description\":\"Deployment enables declarative updates for Pods and ReplicaSets.\",\"metadata\":{\"turandot.copy.1\":\"metadata.labels-\u003espec.selector.matchLabels\",\"turandot.copy.2\":\"metadata.labels-\u003espec.template.metadata.labels\",\"turandot.copy.3\":\"metadata.annotations-\u003espec.template.metadata.annotations\",\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"apps/v1\"}}}"
+            },
+            {
+              "tosca.attributes": "{}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"labels\":{\"app\":\"mongodb\"},\"namespace\":\"default\"}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Metadata\":{\"description\":\"ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.\",\"metadata\":{\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\"}}}"
+            },
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"ports\":[{\"targetPort\":27017,\"name\":\"db\",\"protocol\":\"TCP\",\"port\":27017}]}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Service is a named abstraction of software service (for example, mysql) consisting of local port (for example 3306) that the proxy listens on, and the selector that determines which pods will answer requests sent through the proxy.\",\"metadata\":{\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"v1\",\"turandot.copy\":\"metadata.labels-\u003espec.selector\",\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\"}}}"
+            }
+          ],
+          "clout.edge": [],
+          "tosca.attributes": "{}",
+          "tosca.description": "",
+          "tosca.entity": "nodeTemplate",
+          "tosca.name": "mongodb",
+          "tosca.properties": "{}",
+          "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Represents a microservice: a controlled pod (Deployment) plus a controlled endpoint (Service).\"}}",
+          "uid": "_:clout.vertex._23IVk4zRBTSSbxqcae7KIptQiNn"
+        },
+        {
+          "capabilities": [
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"template\":{\"spec\":{\"schedulerName\":\"scheduler-plugins-scheduler\",\"containers\":[{\"imagePullPolicy\":\"Always\",\"name\":\"details\",\"image\":\"docker.io/istio/examples-bookinfo-details-v1:1.16.2\"}]}}}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Deployment\":{\"description\":\"Deployment enables declarative updates for Pods and ReplicaSets.\",\"metadata\":{\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"apps/v1\",\"turandot.copy.1\":\"metadata.labels-\u003espec.selector.matchLabels\",\"turandot.copy.2\":\"metadata.labels-\u003espec.template.metadata.labels\",\"turandot.copy.3\":\"metadata.annotations-\u003espec.template.metadata.annotations\"}}}"
+            },
+            {
+              "tosca.attributes": "{}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"labels\":{\"app\":\"details\"},\"namespace\":\"default\"}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Metadata\":{\"description\":\"ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.\",\"metadata\":{\"specification.name\":\"Kubernetes\",\"specification.version\":\"1.22.1\"}}}"
+            },
+            {
+              "tosca.attributes": "{\"status\":null}",
+              "tosca.description": "",
+              "tosca.entity": "capability",
+              "tosca.name": null,
+              "tosca.properties": "{\"spec\":{\"ports\":[{\"name\":\"http\",\"protocol\":\"TCP\",\"port\":9080,\"targetPort\":9080}]}}",
+              "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Service is a named abstraction of software service (for example, mysql) consisting of local port (for example 3306) that the proxy listens on, and the selector that determines which pods will answer requests sent through the proxy.\",\"metadata\":{\"specification.version\":\"1.22.1\",\"turandot.apiVersion\":\"v1\",\"turandot.copy\":\"metadata.labels-\u003espec.selector\",\"turandot.metadata\":\"true\",\"specification.name\":\"Kubernetes\"}}}"
+            }
+          ],
+          "clout.edge": [],
+          "tosca.attributes": "{}",
+          "tosca.description": "",
+          "tosca.entity": "nodeTemplate",
+          "tosca.name": "details",
+          "tosca.properties": "{}",
+          "tosca.types": "{\"cloud.puccini.kubernetes::Service\":{\"description\":\"Represents a microservice: a controlled pod (Deployment) plus a controlled endpoint (Service).\"}}",
+          "uid": "_:clout.vertex._23IVk7fCslw3C8mDrKubFkFvtgI"
+        }
+      ]
+    }
+  ]
+}
