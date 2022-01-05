@@ -18,3 +18,13 @@ Example:
 ```
 puccini-tosca compile /home/angelo/scheduler-plugins-project/ca-scheduler-examples/examples/bookinfo/bookinfo.yaml --exec=https://raw.githubusercontent.com/tliron/turandot/main/assets/tosca/profiles/kubernetes/1.0/js/resources/get.js --output=/home/angelo/scheduler-plugins-project/ca-scheduler-examples/examples/bookinfo/bookinfo-k8s.yaml
 ```
+
+- Apply the generated k8s configuration file:
+```
+kubectl apply -f /path/to/bookinfo-k8s.yaml
+``
+
+Example:
+```
+kubectl apply -f /home/angelo/scheduler-plugins-project/ca-scheduler-examples/examples/bookinfo/bookinfo-k8s.yaml
+```
