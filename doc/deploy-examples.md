@@ -22,7 +22,7 @@ puccini-tosca compile /home/angelo/scheduler-plugins-project/ca-scheduler-exampl
 - Apply the generated k8s configuration file:
 ```
 kubectl apply -f /path/to/bookinfo-k8s.yaml
-``
+```
 
 Example:
 ```
